@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Invoice Report</title>
+    <style>
+        *,
+        ::before,
+        ::after {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb;
+        }
+
+        html {
+            line-height: 1.5;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        body {
+            margin: 0;
+            line-height: inherit;
+        }
+
+        hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        b,
+        strong {
+            font-weight: bolder;
+        }
+
+        code,
+        kbd,
+        samp,
+        pre {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 1em;
+        }
+
+
+        small {
+            font-size: 80%;
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+
+        sub {
+            bottom: -0.25em;
+        }
+
+        sup {
+            top: -0.5em;
+        }
+
+        table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse;
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0;
+        }
+
+        button,
+        select {
+            text-transform: none;
+        }
+
+        button,
+        [type='button'],
+        [type='reset'],
+        [type='submit'] {
+            background-color: transparent;
+            background-image: none;
+        }
+
+        progress {
+            vertical-align: baseline;
+        }
+
+        summary {
+            display: list-item;
+        }
+
+        blockquote,
+        dl,
+        dd,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        figure,
+        p,
+        pre {
+            margin: 0;
+        }
+
+        fieldset {
+            margin: 0;
+            padding: 0;
+        }
+
+        legend {
+            padding: 0;
+        }
+
+        ol,
+        ul,
+        menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        dialog {
+            padding: 0;
+        }
+
+        button,
+        [role="button"] {
+            cursor: pointer;
+        }
+
+        img,
+        svg,
+        video,
+        canvas,
+        audio,
+        iframe,
+        embed,
+        object {
+            display: block;
+            vertical-align: middle;
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        [hidden] {
+            display: none;
+        }
+
+
+        .fixed {
+            position: fixed;
+        }
+
+        .bottom-0 {
+            bottom: 0px;
+        }
+
+        .left-0 {
+            left: 0px;
+        }
+
+        .table {
+            display: table;
+        }
+
+        .h-12 {
+            height: 3rem;
+        }
+
+        .w-1\/2 {
+            width: 50%;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .border-collapse {
+            border-collapse: collapse;
+        }
+
+        .border-spacing-0 {
+            border-spacing: 0px 0px;
+        }
+
+        .whitespace-nowrap {
+            white-space: nowrap;
+        }
+
+        .border-b {
+            border-bottom-width: 1px;
+        }
+
+        .border-b-2 {
+            border-bottom-width: 2px;
+        }
+
+        .border-r {
+            border-right-width: 1px;
+        }
+
+        .border-main {
+            border-color: #5c6ac4;
+        }
+
+        .bg-main {
+            background-color: #5c6ac4;
+        }
+
+        .bg-slate-100 {
+            background-color: #f1f5f9;
+        }
+
+        .p-3 {
+            padding: 0.75rem;
+        }
+
+        .px-14 {
+            padding-left: 3.5rem;
+            padding-right: 3.5rem;
+        }
+
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .py-10 {
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+        }
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .py-6 {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .pb-3 {
+            padding-bottom: 0.75rem;
+        }
+
+        .pl-2 {
+            padding-left: 0.5rem;
+        }
+
+        .pl-3 {
+            padding-left: 0.75rem;
+        }
+
+        .pl-4 {
+            padding-left: 1rem;
+        }
+
+        .pr-3 {
+            padding-right: 0.75rem;
+        }
+
+        .pr-4 {
+            padding-right: 1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .align-top {
+            vertical-align: top;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+
+        .text-main {
+            color: #5c6ac4;
+        }
+
+        .text-neutral-600 {
+            color: #525252;
+        }
+
+        .text-neutral-700 {
+            color: #404040;
+        }
+
+        .text-slate-300 {
+            color: #cbd5e1;
+        }
+
+        .text-slate-400 {
+            color: #94a3b8;
+        }
+
+        .text-white {
+            color: #fff;
+        }
+
+        @page {
+            margin: 0;
+        }
+
+        @media print {
+            body {
+            }
+        }
+
+        .h-auto {
+            height: auto;
+        }
+
+        .w-20 {
+            width: 5rem;
+        }
+        .relative {
+            position: relative;
+        }
+        .absolute {
+            position: absolute;
+        }
+        .object-contain {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .max-h-20 {
+            max-height: 5rem; /* 80px */
+        }
+        .h-20 {
+            height: 5rem; /* 80px */
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <div class="py-4">
+        <div class="px-14 py-6">
+            <table class="w-full border-collapse border-spacing-0">
+                <tbody>
+                <tr>
+                    <td class="w-full align-top">
+                        <div class="relative h-20"> <!-- h-20 = 80px -->
+                            <img th:if="${company.logo != null && !company.logo.isEmpty() && logoBase64 != ''}"
+                                 th:src="@{'data:image/png;base64,' + ${logoBase64}}"
+                                 class="absolute max-h-20 w-auto object-contain"
+                                 alt="Company Logo"
+                                 onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+                            <p style="display: none;" class="absolute text-sm text-neutral-600">No logo available</p>
+                        </div>
+                    </td>
+
+                    <td class="align-top">
+                        <div class="text-sm">
+                            <table class="border-collapse border-spacing-0">
+                                <tbody>
+                                <tr>
+                                    <td class="border-r pr-4">
+                                        <div>
+                                            <p class="whitespace-nowrap text-slate-400 text-right">Date</p>
+                                            <p class="whitespace-nowrap font-bold text-main text-right" th:text="${#temporals.format(invoice.createdAt, 'dd MMM yyyy')}"></p>
+                                        </div>
+                                    </td>
+                                    <td class="pl-4">
+                                        <div>
+                                            <p class="whitespace-nowrap text-slate-400 text-right">Invoice #</p>
+                                            <p class="whitespace-nowrap font-bold text-main text-right" th:text="${invoice.id}"></p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-slate-100 px-14 py-6 text-sm">
+            <table class="w-full border-collapse border-spacing-0">
+                <tbody>
+                <tr>
+                    <td class="w-1/2 align-top">
+                        <div class="text-sm text-neutral-600">
+                            <p class="font-bold" th:text="${company.companyName}"></p>
+                            <p th:text="'Name: ' + ${invoice.userName}"></p>
+                            <p th:text="'Email: ' + ${invoice.userEmail}"></p>
+                            <p th:text="'Phone: ' + ${invoice.userPhone}"></p>
+                            <p th:text="'Address: ' + ${company.address}"></p>
+                        </div>
+                    </td>
+                    <td class="w-1/2 align-top text-right">
+                        <div class="text-sm text-neutral-600">
+                            <p class="font-bold" th:text="${invoice.memberName}"></p>
+                            <p th:text="'MemberID: ' + ${invoice.memberId}"></p>
+                            <p th:text="'Phone: ' + ${invoice.memberPhone}"></p>
+                            <p th:text="'Package: ' + ${invoice.packageName}"></p>
+                            <p th:text="'StartDate: ' + ${#temporals.format(invoice.startDate, 'dd MMM yyyy')}"></p>
+                            <p th:text="'EndDate: ' + ${#temporals.format(invoice.endDate, 'dd MMM yyyy')}"></p>
+                            <p th:text="'Status: ' + ${invoice.status}"></p>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="px-14 py-4 text-sm text-neutral-700 bg-yellow-50 border-l-4 border-yellow-400">
+            <p class="font-bold text-main">MEMO</p>
+            <p th:utext="${invoice.memo}"></p>
+        </div>
+
+        <div class="px-14 py-10 text-sm text-neutral-700">
+            <table class="w-full border-collapse border-spacing-0">
+                <thead>
+                <tr>
+                    <td class="border-b-2 border-main pb-3 pl-3 font-bold text-main">#</td>
+                    <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">Package</td>
+                    <td class="border-b-2 border-main pb-3 pl-2 text-right font-bold text-main">Price</td>
+                    <td class="border-b-2 border-main pb-3 pl-2 text-center font-bold text-main">Discount</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="border-b py-3 pl-3">1.</td>
+                    <td class="border-b py-3 pl-2" th:text="${invoice.packageName}"></td>
+                    <td class="border-b py-3 pl-2 text-right" th:text="${invoice.amountPaid}"></td>
+                    <td class="border-b py-3 pl-2 text-center" th:text="${invoice.discountPercentage}"></td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <table class="w-full border-collapse border-spacing-0">
+                            <tbody>
+                            <tr>
+                                <td class="w-full"></td>
+                                <td>
+                                    <table class="w-full border-collapse border-spacing-0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="bg-main p-3">
+                                                <div class="whitespace-nowrap font-bold text-white">Total:</div>
+                                            </td>
+                                            <td class="bg-main p-3 text-right">
+                                                <div class="whitespace-nowrap font-bold text-white" th:text="${invoice.amountPaid}"></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="px-14 text-sm text-neutral-700">
+            <p class="text-main font-bold">PAYMENT DETAILS</p>
+            <p th:text="'Payment Method: ' + ${invoice.status}"></p>
+            <p th:text="'Account Name: ' + ${company.accountName}"></p>
+            <p th:text="'Account Number: ' + ${company.accountNumber}"></p>
+        </div>
+
+        <div class="px-14 py-10 text-sm text-neutral-700">
+            <p class="text-main font-bold">Description</p>
+            <p class="italic" th:text="${company.description}"></p>
+        </div>
+
+        <footer class="fixed bottom-0 left-0 bg-slate-100 w-full text-neutral-600 text-center text-xs py-3">
+            <span th:text="${company.companyName}"></span>
+            <span class="text-slate-300 px-2">|</span>
+            <span th:text="${company.website}"></span>
+            <span class="text-slate-300 px-2">|</span>
+            <span th:text="${company.phone}"></span>
+            <span class="text-slate-300 px-2">|</span>
+            <span th:text="${company.companyEmail}"></span>
+        </footer>
+    </div>
+</div>
+</body>
+</html>
