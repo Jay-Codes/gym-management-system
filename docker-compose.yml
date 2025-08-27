@@ -14,7 +14,7 @@ services:
       - EASYSMS_API_KEY=beem_api_key
       - EASYSMS_API_SECRET=beem_api_secret
       - EASYSMS_API_SENDERID=sender_id
-      - APP_JWT_SECRET=verySaf3p@ss
+      - APP_JWT_SECRET=verySaf3pass
       - APP_JWT_EXPIRATIONMS=86400000
       - FILE_UPLOAD_DIR=/var/uploads
     depends_on:
