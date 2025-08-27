@@ -1,0 +1,52 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/fitnessCenterDB?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=mysql_password
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5Dialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EASYSMS_API_KEY=beem_api_key
+      - EASYSMS_API_SECRET=beem_api_secret
+      - EASYSMS_API_SENDERID=sender_id
+      - APP_JWT_SECRET=verySaf3p@ss
+      - APP_JWT_EXPIRATIONMS=86400000
+      - FILE_UPLOAD_DIR=/var/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads:/var/uploads
+    networks:
+      - gym-network
+
+  db:
+    image: mysql:5.7
+    command: ["--innodb-buffer-pool-size=64M", "--performance-schema=0"]
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql_password
+      - MYSQL_DATABASE=fitnessCenterDB
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pmysql_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gym-network
+
+volumes:
+  db_data:
+  uploads:
+
+networks:
+  gym-network:
+    driver: bridge
